@@ -39,9 +39,6 @@ class PayinController extends Controller
 
             return response()->json($response);
         }
-
-        
-        
 	$cash = $request->cash;
     // $extra_amt = $request->extra_cash;
      $type = $request->type;
@@ -286,9 +283,7 @@ public function withdraw_request(Request $request)
 		 $account_id=$user[0]->accountno_id;
 		 $mobile=$user[0]->mobile;
 		 $wallet=$user[0]->wallet;
-// 		 dd($wallet);
 		 $accountlist=DB::select("SELECT * FROM `bank_details` WHERE `id`=$account_id");
-		 
 		 $insert= DB::table('transaction_history')->insert([
         'userid' => $userid,
         'amount' => $amount,
@@ -307,154 +302,6 @@ public function withdraw_request(Request $request)
        $response =[ 'success'=>"400",'data'=>[],'message'=>'Not Found Data'];return response ()->json ($response,400); 
       } 
     }
-	
-// 		public function payin(Request $request)
-// 	{
-			
-// 		 $validator = Validator::make($request->all(), [
-//             'user_id' => 'required|exists:users,id',
-//             'cash' => 'required',
-//             'type' => 'required',
-//         ]);
-//         $validator->stopOnFirstFailure();
-
-//         if ($validator->fails()) {
-//             $response = [
-//                 'status' => 400,
-//                 'message' => $validator->errors()->first()
-//             ];
-
-//             return response()->json($response);
-//         }	
-			
-//          $date = date('YmdHis');
-//   $rand = rand(11111, 99999);
-//   $invno = "INV".$date . $rand;
-// 			 $datetime=now();
-//         $check_id = DB::table('users')->where('id',$request->user_id)->first();
-// 	if($request->type == 1 || $request->type == 2){
-// 		if($request->cash >= 199){
-//       if ($check_id) {
-// 		    $insert_payin = DB::table('payins')->insert([
-//                 'user_id' => $request->user_id,
-//                 'cash' => $request->cash,
-//                 'type' => $request->type,
-//                 'order_id' => $invno,
-              
-//                 'status' => 1, // Assuming initial status is 0
-// 				'typeimage'=>"https://root.winzy.app/uploads/favicon1.png",
-//                 'created_at'=>$datetime,
-//                 'updated_at'=>$datetime
-//             ]);
-        
-//             if (!$insert_payin) {
-//                 return response()->json(['status' => 400, 'message' => 'Failed to store record in payin history!']);
-//             }
-// 		$postpara=[
-// 			 "mId"=> "iDXVoIjm/4k=RkZGRk9FWFpLWlZQNkRCNQ==",
-// 			  "amount"=> "$request->cash",
-// 			  "invno"=> "$invno",
-// 			  "fName"=> "$check_id->username",
-// 			  "lName"=> "$check_id->username",
-// 			  "mNo"=> "$check_id->mobile",
-// 			  "currency"=> "INR",
-
-// 			];
-// 			$encodedparameter=json_encode($postpara);
-		 
-// 		$curl = curl_init();
-
-// 		curl_setopt_array($curl, array(
-// 		  CURLOPT_URL => 'https://indiaonlinepay.com/api/iopregisterupiintent',
-// 		  CURLOPT_RETURNTRANSFER => true,
-// 		  CURLOPT_ENCODING => '',
-// 		  CURLOPT_MAXREDIRS => 10,
-// 		  CURLOPT_TIMEOUT => 0,
-// 		  CURLOPT_FOLLOWLOCATION => true,
-// 		  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-// 		  CURLOPT_CUSTOMREQUEST => 'POST',
-// 		  CURLOPT_POSTFIELDS =>$encodedparameter,
-// 		  CURLOPT_HTTPHEADER => array(
-// 			'opStatus: 0',
-// 			'Content-Type: application/json',
-// 			'Cookie: Path=/'
-// 		  ),
-// 		));
-
-// 		 $response = curl_exec($curl);
-		  
-//     // echo $response;die;
-// 		curl_close($curl);
-		   
-// 		$decoded=json_decode($response);
-// 		   if(isset($decoded->responseCode)&&$decoded->responseCode==200)
-// 		 {
-// 		 		$transactionid=$decoded->orderId;
-// 			   $intent=$decoded->intent;
-// 			    $orderId=$decoded->orderId;
-// 			   $status=$decoded->status;
-// 			    $merchantIdentifier=$decoded->merchantIdentifier;
-// 			    $amount=$decoded->amount;
-// 			    $currency=$decoded->currency;
-// 			    $expiryDate=$decoded->expiryDate;
-// 			    $responseCode=$decoded->responseCode;
-// 			    $responseMessage=$decoded->responseMessage; 
-// 			   $transactionDate=$decoded->transactionDate;
-// 			    $encodedIntent = urlencode($intent);
-
-//     // Construct the URL for generating QR code
-//     $qrCodeURL = "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=$encodedIntent&ecc=M";
-
-			 
-// 			 DB::table('payins')->where('order_id', $invno)->update(['transaction_id' => $transactionid]);
-			  
-// 			   $response=[
-			   
-// 				"orderId" => $orderId,
-// 				"status"=> $status,
-// 				"merchantIdentifier"=> $merchantIdentifier,
-// 				"amount"=> $amount,
-// 				"currency"=> $currency,
-// 				"expiryDate"=> $expiryDate,
-// 				"responseCode"=> $responseCode,
-// 				"responseMessage"=>$responseMessage,
-// 				"intent"=> $intent,
-// 				"transactionDate"=> $transactionDate,
-// 				   "qrcode"=>$qrCodeURL    
-// 			   ];
-			   
-// 			  $res= json_encode($response);
-			   
-// 			 echo $res;
-// 		 }else
-// 		 {
-// 			 return response()->json([
-//                 'status' => 400,
-//                 'message' => $response
-//             ]);
-// 		 }
-		   
-//           } else {
-//             return response()->json([
-//                 'status' => 400,
-//                 'message' => 'Internal error!'
-//             ]);
-//         }
-//           }else{
-//           return response()->json([
-//                 'status' => 400,
-//                 'message' => ' Minimum deposit is 200 rupees'
-//             ]); 
-//         }   
-//         }else{
-//           return response()->json([
-//                 'status' => 400,
-//                 'message' => 'Indianpay is Not Supported ....!'
-//             ]); 
-//         }
-		
-// 	}
-	
 	
 	 public function  callbackfunc()
     {
@@ -582,12 +429,10 @@ public function withdraw_request(Request $request)
             header("Cache-Control: post-check=0, pre-check=0", false);
             header("Pragma: no-cache");
                     
-            
             $date=date('Y-m-d H:i:s');
           $data = json_decode(file_get_contents("php://input"), true);
          $d=json_encode($data);
          
-	
           DB::table('withdrawal_calback')->insert([
                'data'=>$d,
 			  'datetime'=>$date
@@ -597,15 +442,8 @@ public function withdraw_request(Request $request)
 		 if(isset($data['status'])&&$data['status']=='SUCCESS'&&isset($data['gatewayResponseStatus'])&&$data['gatewayResponseStatus']=='SUCCESS')
 		 {
 
-
-
-				 
 		 }
         
-          
-          
-          
-         
         }
 	
 	

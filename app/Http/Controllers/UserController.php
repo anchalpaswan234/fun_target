@@ -118,6 +118,36 @@ class UserController extends Controller
            return redirect()->route('login');  
         }
       }
+      
+      public function wallet_subtract(Request $request, $id)
+{
+    date_default_timezone_set('Asia/Kolkata');
+    $ammount = $request->wallet;
+
+    // Check if the request has a wallet amount
+    if ($request->has('wallet')) {
+        // Retrieve the user using Eloquent
+        $user = User::find($id);
+
+        // Check if user exists
+        if (!$user) {
+            return redirect()->back()->with('error', 'User not found.');
+        }
+
+        // Check if the wallet amount is sufficient
+        if ($user->wallet < $ammount) {
+            return redirect()->back()->with('error', 'Insufficient wallet balance.');
+        }
+
+        // Subtract the amount from the wallet
+        $user->wallet -= $ammount;
+        $user->save();
+
+        return redirect()->route('users')->with('success', 'Amount subtracted successfully!');
+    }
+
+    return redirect()->back()->with('error', 'No amount specified.');
+}
 	
 		public function user_mlm(Request $request,$id)
     {

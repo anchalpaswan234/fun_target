@@ -293,6 +293,10 @@ class GameApiController extends Controller
         
     	$amount=$request->amount;
     	
+    	 $commission = $amount * 0.05; // Calculate commission   
+        $betAmount = $amount - $commission; // Bet amount after commission deduction
+
+    	
         // Check user wallet balance
         if ($user->wallet < $request->amount) {
             return response()->json(['status' => 400, 'message' => 'Insufficient balance']);
@@ -309,9 +313,9 @@ class GameApiController extends Controller
     
         // Create a new bet
         $bet = Bet::create([
-            'amount' => $request->amount,
-            'trade_amount' => $request->amount,
-            'commission' => 0,
+            'amount' => $betAmount,
+            'trade_amount' => $amount,
+            'commission' => $commission,
             'number' => $request->number,
             'games_no' => Betlog::where('game_id', $request->game_id)->value('games_no'),
             'game_id' => $request->game_id,
@@ -865,8 +869,7 @@ public function cron_old($game_id)
 	private function andarbaharpatta($game_id,$period,$result)
      {
 		 //dd($game_id);
-      $lastimage=DB::select("SELECT cards.*, bet_results.random_card AS rand_card, bet_results.game_id AS gameiid,bet_results.id as rid FROM cards JOIN bet_results ON cards.card = bet_results.random_card WHERE bet_results.game_id = $game_id ORDER BY bet_results.id DESC LIMIT 1; 
-");
+      $lastimage=DB::select("SELECT cards.*, bet_results.random_card AS rand_card, bet_results.game_id AS gameiid,bet_results.id as rid FROM cards JOIN bet_results ON cards.card = bet_results.random_card WHERE bet_results.game_id = $game_id ORDER BY bet_results.id DESC LIMIT 1; ");
 		 //dd($lastimage);
  
             //card id
@@ -880,16 +883,16 @@ public function cron_old($game_id)
     
 
 
- $randomNumbers = rand(1, 11); 
-     $evenNumbersss = $randomNumbers % 2; 
-      
-if($evenNumbersss ==1){
-$dragon=$randomNumbers;
-
-}else{
-    $dragon=$randomNumbers-1;
+     $randomNumbers = rand(1, 11); 
+         $evenNumbersss = $randomNumbers % 2; 
+          
+    if($evenNumbersss ==1){
+    $dragon=$randomNumbers;
     
-}
+    }else{
+        $dragon=$randomNumbers-1;
+        
+    }
      //echo $dragon; 
      $limit=$dragon-1;
      $patta=DB::select("SELECT * FROM cards where card != $res  ORDER BY RAND(colour) LIMIT $limit");

@@ -148,6 +148,8 @@ Route::get('/dashboard',[LoginController::class,'dashboard'])->name('dashboard')
     Route::get('/users-active-{id}', [UserController::class,'user_active'])->name('user.active');
     Route::get('/users-inactive-{id}',[UserController::class, 'user_inactive'])->name('user.inactive');
     Route::post('/wallet-store-{id}',[UserController::class, 'wallet_store'])->name('wallet.store');
+    Route::post('/wallet/subtract/{id}', [UserController::class, 'wallet_subtract'])->name('wallet.subtract');
+
 	Route::get('/users-mlm-{id}',[UserController::class, 'user_mlm'])->name('user.mlm');
 	
 	Route::get('/registerwithref/{id}',[UserController::class,'registerwithref'])->name('registerwithref');

@@ -2,7 +2,22 @@
 
 @section('admin')
 
+<style>
+    .btn-group .btn {
+    margin-right: 5px; /* Add spacing between buttons */
+}
 
+.btn-group .btn:last-child {
+    margin-right: 0; /* Remove right margin from the last button */
+}
+
+.btn-group {
+    display: flex; /* Flexbox for alignment */
+    justify-content: center; /* Center buttons if needed */
+    align-items: center;
+}
+
+</style>
 
 <div class="container-fluid">
     <div class="row">
@@ -76,8 +91,23 @@
                       <td>{{$item->email}}</td>
                       <td>{{$item->mobile}}</td>
 					   <td>{{$item->sname}}</td>
-                      <td class="d-flex">{{$item->wallet}}
-					    <i class="fa fa-plus mt-1 ml-3" data-toggle="modal" data-target="#exampleModalCenter{{$item->id}}" style="font-size:20px"></i>
+         <!--             <td>{{$item->wallet}}-->
+         <!--             <div>-->
+					    <!--<div class="btn btn-info btn-sm"> <i class="fa fa-plus" data-toggle="modal" data-target="#exampleModalCenter{{$item->id}}" style="font-size:20px"></i></div>-->
+					    <!--<div class="btn btn-danger btn-sm"> <i class="fa fa-minus" data-toggle="modal" data-target="#subtractWalletModal{{$item->id}}" style="font-size:20px"></i></div>-->
+					    <!--</div>-->
+					    <td>{{$item->wallet}}
+    <div class="btn-group" role="group" aria-label="Wallet actions">
+        <!-- Add Funds Button -->
+        <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#exampleModalCenter{{$item->id}}" title="Add Funds">
+            <i class="fa fa-plus" style="font-size:20px"></i>
+        </button>
+        
+        <!-- Subtract Funds Button -->
+        <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#subtractWalletModal{{$item->id}}" title="Subtract Funds">
+            <i class="fa fa-minus" style="font-size:20px"></i>
+        </button>
+    </div>
 						  
 						   <div class="modal fade" id="exampleModalCenter{{$item->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -117,6 +147,41 @@
       </div>
     </div>
 	</div>
+	
+							  
+						  <!-- Subtract Wallet Modal -->
+                    <div class="modal fade" id="subtractWalletModal{{$item->id}}" tabindex="-1" role="dialog" aria-labelledby="subtractWalletModalTitle" aria-hidden="true">
+                      <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title" id="subtractWalletModalTitle">Subtract Wallet</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+                          </div>
+                          <form action="{{route('wallet.subtract', $item->id)}}" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            <div class="modal-body">
+                              <div class="container-fluid">
+                                <div class="row">
+                                  <div class="form-group col-md-12">
+                                    <label for="wallet">Wallet Amount</label>
+                                    <input type="text" class="form-control" id="wallet" name="wallet" value="" placeholder="Enter Amount">
+                                    @error('wallet')
+                                      <div class="alert alert-danger">{{ $message }}</div>
+                                    @enderror
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                              <button type="submit" class="btn btn-primary">Submit</button>
+                            </div>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
 
 					   </td>
                       <td>{{$item->winning_wallet}}</td>

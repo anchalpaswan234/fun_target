@@ -452,12 +452,7 @@ public function withdraw(Request $request)
             $response['status'] = "400";
             return response()->json($response,400);
     }
-
-    
-    
 }
-
-
 
 ///// Gift Claim List ////
 
@@ -901,7 +896,7 @@ $data = DB::table('users as u')
 			'last_login_time'=>$ldate->format('Y-m-d H:i:s'),
 			'apk_link'=> "https://root.motug.com/motug.apk",
 			'referral_code_url'=> env('APP_URL')."registerwithref/".$data->referral_code,
-			'aviator_link'=>"https://foundercodetech.com",
+			'aviator_link'=>"https://aviatorudaan.com",
 			'aviator_event_name'=>"motuaviator"  
         ]);
     } else {    
@@ -2237,7 +2232,7 @@ public function invitation_bonus_list(Request $request)
     $first_recharge=$referid[0]->first_recharge;
     $referuserid=$referid[0]->referral_user_id;
    // dd($first_recharge);
-if($first_recharge == 0){
+    if($first_recharge == 0){
     
     $extra=DB::select("SELECT * FROM `extra_first_deposit_bonus` WHERE `first_deposit_ammount`=$cash"); 
     $id=$extra[0]->id;
@@ -2248,17 +2243,7 @@ if($first_recharge == 0){
 
     DB::INSERT("INSERT INTO `extra_first_deposit_bonus_claim`( `userid`, `extra_fdb_id`, `amount`, `bonus`, `status`, `created_at`, `updated_at`) VALUES ('$uid','$id','$first_deposit_ammount','$bonus','0','$datetime','$datetime')");
    
-                    $updateUser =DB::update("UPDATE users 
-    SET 
-    wallet = wallet + $amount,
-    first_recharge = first_recharge + $cash,
-    first_recharge_amount = first_recharge_amount + $cash,
-    recharge = recharge + $cash,
-    total_payin = total_payin + $cash,
-    no_of_payin = no_of_payin + 1,
-    deposit_balance = deposit_balance + $cash
-    WHERE id = $uid;
-    ");
+                    $updateUser =DB::update("UPDATE users SET wallet = wallet + $amount,first_recharge = first_recharge + $cash,first_recharge_amount = first_recharge_amount + $cash,recharge = recharge + $cash,total_payin = total_payin + $cash,no_of_payin = no_of_payin + 1,deposit_balance = deposit_balance + $cashWHERE id = $uid;");
     //dd("hiii");
     // dd("UPDATE users SET yesterday_payin = yesterday_payin + $cash,yesterday_no_of_payin  = yesterday_no_of_payin + 1,yesterday_first_deposit = yesterday_first_deposit + $cash WHERE id=$referuserid");
     //dd($referuserid);
